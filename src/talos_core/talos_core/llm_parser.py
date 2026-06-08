@@ -55,9 +55,10 @@ SYSTEM_PROMPT = """\
 사용자의 자연어 명령을 구조화된 미션 스텝으로 변환합니다.
 
 사용 가능한 구역:
-- office_a: 사무실 A (왼쪽)
-- office_b: 사무실 B (오른쪽)
-- hallway: 복도
+- office_a: 사무실 A (왼쪽, 지진 피해 심함)
+- office_b: 사무실 B (북동쪽, 캐비닛 붕괴)
+- server_room: 서버실 (좁은 방, 위험물 있음)
+- hallway: L자 복도 (잔해로 좁아짐)
 - base: 건물 외부 기지 (시작 위치)
 
 탐지 가능한 객체:
@@ -131,15 +132,17 @@ class LLMParser:
         # Determine target rooms
         rooms = []
         if '전체' in command or '다' in command or '모든' in command or '훑' in command:
-            rooms = ['office_a', 'hallway', 'office_b']
+            rooms = ['hallway', 'office_a', 'server_room', 'office_b']
         elif 'a' in command.lower() or '왼' in command or 'A' in command:
             rooms = ['office_a']
         elif 'b' in command.lower() or '오른' in command or 'B' in command:
             rooms = ['office_b']
+        elif '서버' in command or 'server' in command.lower():
+            rooms = ['server_room']
         elif '복도' in command or 'hall' in command.lower():
             rooms = ['hallway']
         else:
-            rooms = ['office_a', 'hallway', 'office_b']
+            rooms = ['hallway', 'office_a', 'server_room', 'office_b']
 
         # Determine on_detect behavior
         on_detect = 'report'

@@ -80,6 +80,7 @@ class ReportGenerator:
         room_names = {
             'office_a': '사무실 A',
             'office_b': '사무실 B',
+            'server_room': '서버실',
             'hallway': '복도',
             'base': '건물 외부 기지',
         }
