@@ -54,11 +54,11 @@ SYSTEM_PROMPT = """\
 당신은 재난 탐색 로봇 TALOS의 미션 플래너입니다.
 사용자의 자연어 명령을 구조화된 미션 스텝으로 변환합니다.
 
-사용 가능한 방:
-- room_left: 왼쪽 방
-- room_right: 오른쪽 방
+사용 가능한 구역:
+- office_a: 사무실 A (왼쪽)
+- office_b: 사무실 B (오른쪽)
 - hallway: 복도
-- base: 기지 (시작 위치)
+- base: 건물 외부 기지 (시작 위치)
 
 탐지 가능한 객체:
 - person: 사람 (생존자/부상자)
@@ -131,15 +131,15 @@ class LLMParser:
         # Determine target rooms
         rooms = []
         if '전체' in command or '다' in command or '모든' in command or '훑' in command:
-            rooms = ['room_left', 'hallway', 'room_right']
-        elif '왼' in command or 'left' in command.lower():
-            rooms = ['room_left']
-        elif '오른' in command or 'right' in command.lower():
-            rooms = ['room_right']
+            rooms = ['office_a', 'hallway', 'office_b']
+        elif 'a' in command.lower() or '왼' in command or 'A' in command:
+            rooms = ['office_a']
+        elif 'b' in command.lower() or '오른' in command or 'B' in command:
+            rooms = ['office_b']
         elif '복도' in command or 'hall' in command.lower():
             rooms = ['hallway']
         else:
-            rooms = ['room_left', 'hallway', 'room_right']
+            rooms = ['office_a', 'hallway', 'office_b']
 
         # Determine on_detect behavior
         on_detect = 'report'

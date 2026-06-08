@@ -1,17 +1,17 @@
 rooms:
-  room_left:
-    x: 1.0
+  office_a:
+    x: 0.5
     y: 2.5
-    yaw: 0.0
-  room_right:
+    yaw: 1.57
+  office_b:
     x: 5.5
     y: 2.5
-    yaw: 3.14
+    yaw: 1.57
   hallway:
     x: 3.0
     y: -2.0
-    yaw: 0.0
+    yaw: 1.57
   base:
-    x: 0.0
-    y: 0.0
-    yaw: 0.0
+    x: 3.0
+    y: -5.5
+    yaw: 1.57

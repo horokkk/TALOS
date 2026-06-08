@@ -78,10 +78,10 @@ class ReportGenerator:
         lines = ['=== 탐색 결과 보고 ===']
 
         room_names = {
-            'room_left': '왼쪽 방',
-            'room_right': '오른쪽 방',
+            'office_a': '사무실 A',
+            'office_b': '사무실 B',
             'hallway': '복도',
-            'base': '기지',
+            'base': '건물 외부 기지',
         }
 
         for result in mission_results:

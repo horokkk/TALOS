@@ -19,26 +19,44 @@
     </include>
 
     <!-- ==================== BUILDING STRUCTURE ==================== -->
+    <!-- 10m x 8m 사무실 건물: 사무실 A(왼), 사무실 B(오), 복도(아래) -->
+
     <!-- Outer walls -->
-    <!-- Front wall (Y = -4) -->
-    <model name="wall_front">
+    <!-- 앞벽 (Y=-4) — 건물 출입구 (X=2.4~3.6, 1.2m gap) -->
+    <model name="wall_front_left">
       <static>true</static>
-      <pose>3.0 -4.0 1.0 0 0 0</pose>
+      <pose>0.1 -4.0 1.0 0 0 0</pose>
       <link name="link">
         <collision name="collision">
-          <geometry><box><size>10.0 0.15 2.0</size></box></geometry>
+          <geometry><box><size>4.4 0.15 2.0</size></box></geometry>
         </collision>
         <visual name="visual">
-          <geometry><box><size>10.0 0.15 2.0</size></box></geometry>
+          <geometry><box><size>4.4 0.15 2.0</size></box></geometry>
           <material>
-            <ambient>0.7 0.7 0.7 1</ambient>
-            <diffuse>0.7 0.7 0.7 1</diffuse>
+            <ambient>0.5 0.5 0.5 1</ambient>
+            <diffuse>0.5 0.5 0.5 1</diffuse>
           </material>
         </visual>
       </link>
     </model>
 
-    <!-- Back wall (Y = 4) -->
+    <model name="wall_front_right">
+      <static>true</static>
+      <pose>5.9 -4.0 1.0 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>4.0 0.15 2.0</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>4.0 0.15 2.0</size></box></geometry>
+          <material>
+            <ambient>0.5 0.5 0.5 1</ambient>
+            <diffuse>0.5 0.5 0.5 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
     <model name="wall_back">
       <static>true</static>
       <pose>3.0 4.0 1.0 0 0 0</pose>
@@ -49,14 +67,13 @@
         <visual name="visual">
           <geometry><box><size>10.0 0.15 2.0</size></box></geometry>
           <material>
-            <ambient>0.7 0.7 0.7 1</ambient>
-            <diffuse>0.7 0.7 0.7 1</diffuse>
+            <ambient>0.5 0.5 0.5 1</ambient>
+            <diffuse>0.5 0.5 0.5 1</diffuse>
           </material>
         </visual>
       </link>
     </model>
 
-    <!-- Left wall (X = -2) -->
     <model name="wall_left">
       <static>true</static>
       <pose>-2.0 0.0 1.0 0 0 0</pose>
@@ -67,14 +84,13 @@
         <visual name="visual">
           <geometry><box><size>0.15 8.0 2.0</size></box></geometry>
           <material>
-            <ambient>0.7 0.7 0.7 1</ambient>
-            <diffuse>0.7 0.7 0.7 1</diffuse>
+            <ambient>0.5 0.5 0.5 1</ambient>
+            <diffuse>0.5 0.5 0.5 1</diffuse>
           </material>
         </visual>
       </link>
     </model>
 
-    <!-- Right wall (X = 8) -->
     <model name="wall_right">
       <static>true</static>
       <pose>8.0 0.0 1.0 0 0 0</pose>
@@ -85,17 +101,16 @@
         <visual name="visual">
           <geometry><box><size>0.15 8.0 2.0</size></box></geometry>
           <material>
-            <ambient>0.7 0.7 0.7 1</ambient>
-            <diffuse>0.7 0.7 0.7 1</diffuse>
+            <ambient>0.5 0.5 0.5 1</ambient>
+            <diffuse>0.5 0.5 0.5 1</diffuse>
           </material>
         </visual>
       </link>
     </model>
 
     <!-- ==================== INTERIOR WALLS ==================== -->
-    <!-- Center divider wall (X = 3) - splits left/right rooms -->
-    <!-- Upper section (with door gap) -->
-    <model name="wall_center_upper">
+    <!-- 사무실 A/B 사이 칸막이 (X=3, Y=1.0~4.0) -->
+    <model name="wall_divider">
       <static>true</static>
       <pose>3.0 2.5 1.0 0 0 0</pose>
       <link name="link">
@@ -105,135 +120,270 @@
         <visual name="visual">
           <geometry><box><size>0.15 2.8 2.0</size></box></geometry>
           <material>
-            <ambient>0.6 0.6 0.65 1</ambient>
-            <diffuse>0.6 0.6 0.65 1</diffuse>
+            <ambient>0.55 0.55 0.58 1</ambient>
+            <diffuse>0.55 0.55 0.58 1</diffuse>
           </material>
         </visual>
       </link>
     </model>
 
-    <!-- Lower section (with door gap) -->
-    <model name="wall_center_lower">
+    <!-- 복도-사무실 분리 벽 (Y=1.0) — 문 2개 -->
+    <!-- 사무실 A 문: X=0.5~1.7 (1.2m gap) -->
+    <model name="wall_corridor_1">
       <static>true</static>
-      <pose>3.0 -2.5 1.0 0 0 0</pose>
+      <pose>-0.85 1.0 1.0 0 0 0</pose>
       <link name="link">
         <collision name="collision">
-          <geometry><box><size>0.15 2.8 2.0</size></box></geometry>
+          <geometry><box><size>2.1 0.15 2.0</size></box></geometry>
         </collision>
         <visual name="visual">
-          <geometry><box><size>0.15 2.8 2.0</size></box></geometry>
+          <geometry><box><size>2.1 0.15 2.0</size></box></geometry>
           <material>
-            <ambient>0.6 0.6 0.65 1</ambient>
-            <diffuse>0.6 0.6 0.65 1</diffuse>
+            <ambient>0.55 0.55 0.58 1</ambient>
+            <diffuse>0.55 0.55 0.58 1</diffuse>
           </material>
         </visual>
       </link>
     </model>
 
-    <!-- Hallway back wall - separates hallway from rooms (with doorways) -->
-    <!-- Left room: door at X=1.0, gap 1.2m wide -->
-    <model name="wall_hallway_left_1">
+    <model name="wall_corridor_2">
       <static>true</static>
-      <pose>-0.8 1.0 1.0 0 0 0</pose>
+      <pose>2.45 1.0 1.0 0 0 0</pose>
       <link name="link">
         <collision name="collision">
-          <geometry><box><size>2.2 0.15 2.0</size></box></geometry>
+          <geometry><box><size>0.9 0.15 2.0</size></box></geometry>
         </collision>
         <visual name="visual">
-          <geometry><box><size>2.2 0.15 2.0</size></box></geometry>
+          <geometry><box><size>0.9 0.15 2.0</size></box></geometry>
           <material>
-            <ambient>0.6 0.6 0.65 1</ambient>
-            <diffuse>0.6 0.6 0.65 1</diffuse>
+            <ambient>0.55 0.55 0.58 1</ambient>
+            <diffuse>0.55 0.55 0.58 1</diffuse>
           </material>
         </visual>
       </link>
     </model>
 
-    <model name="wall_hallway_left_2">
+    <!-- 사무실 B 문: X=5.0~6.2 (1.2m gap) -->
+    <model name="wall_corridor_3">
       <static>true</static>
-      <pose>2.35 1.0 1.0 0 0 0</pose>
+      <pose>4.0 1.0 1.0 0 0 0</pose>
       <link name="link">
         <collision name="collision">
-          <geometry><box><size>1.1 0.15 2.0</size></box></geometry>
+          <geometry><box><size>1.8 0.15 2.0</size></box></geometry>
         </collision>
         <visual name="visual">
-          <geometry><box><size>1.1 0.15 2.0</size></box></geometry>
+          <geometry><box><size>1.8 0.15 2.0</size></box></geometry>
           <material>
-            <ambient>0.6 0.6 0.65 1</ambient>
-            <diffuse>0.6 0.6 0.65 1</diffuse>
+            <ambient>0.55 0.55 0.58 1</ambient>
+            <diffuse>0.55 0.55 0.58 1</diffuse>
           </material>
         </visual>
       </link>
     </model>
 
-    <!-- Right room: door at X=5.5, gap 1.2m wide -->
-    <model name="wall_hallway_right_1">
+    <model name="wall_corridor_4">
       <static>true</static>
-      <pose>3.85 1.0 1.0 0 0 0</pose>
+      <pose>7.2 1.0 1.0 0 0 0</pose>
       <link name="link">
         <collision name="collision">
-          <geometry><box><size>1.5 0.15 2.0</size></box></geometry>
+          <geometry><box><size>1.4 0.15 2.0</size></box></geometry>
         </collision>
         <visual name="visual">
-          <geometry><box><size>1.5 0.15 2.0</size></box></geometry>
+          <geometry><box><size>1.4 0.15 2.0</size></box></geometry>
           <material>
-            <ambient>0.6 0.6 0.65 1</ambient>
-            <diffuse>0.6 0.6 0.65 1</diffuse>
+            <ambient>0.55 0.55 0.58 1</ambient>
+            <diffuse>0.55 0.55 0.58 1</diffuse>
           </material>
         </visual>
       </link>
     </model>
 
-    <model name="wall_hallway_right_2">
+    <!-- ==================== 사무실 A: 책상/의자 잔해 + 생존자 ==================== -->
+    <!-- 쓰러진 책상 (큰 박스, 옆으로 넘어진 형태) -->
+    <model name="desk_fallen_1">
       <static>true</static>
-      <pose>7.1 1.0 1.0 0 0 0</pose>
+      <pose>0.0 2.8 0.2 0 0 0.3</pose>
       <link name="link">
         <collision name="collision">
-          <geometry><box><size>1.6 0.15 2.0</size></box></geometry>
+          <geometry><box><size>1.2 0.5 0.4</size></box></geometry>
         </collision>
         <visual name="visual">
-          <geometry><box><size>1.6 0.15 2.0</size></box></geometry>
+          <geometry><box><size>1.2 0.5 0.4</size></box></geometry>
           <material>
-            <ambient>0.6 0.6 0.65 1</ambient>
-            <diffuse>0.6 0.6 0.65 1</diffuse>
+            <ambient>0.4 0.25 0.1 1</ambient>
+            <diffuse>0.4 0.25 0.1 1</diffuse>
           </material>
         </visual>
       </link>
     </model>
 
-    <!-- ==================== PROXY OBJECTS ==================== -->
-    <!-- Red cylinder (fire proxy) in left room -->
+    <!-- 의자 잔해 -->
+    <model name="chair_debris_1">
+      <static>true</static>
+      <pose>1.5 3.2 0.15 0.4 0 0.8</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>0.5 0.5 0.3</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>0.5 0.5 0.3</size></box></geometry>
+          <material>
+            <ambient>0.2 0.2 0.2 1</ambient>
+            <diffuse>0.3 0.3 0.3 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- 또 다른 쓰러진 책상 -->
+    <model name="desk_fallen_2">
+      <static>true</static>
+      <pose>-0.5 1.8 0.15 0 0.2 -0.1</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>0.8 0.4 0.3</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>0.8 0.4 0.3</size></box></geometry>
+          <material>
+            <ambient>0.35 0.2 0.08 1</ambient>
+            <diffuse>0.35 0.2 0.08 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- 생존자 1: 사무실 A 책상 뒤 (쓰러져 있음) -->
     <include>
-      <uri>model://red_cylinder</uri>
-      <name>fire_proxy_1</name>
-      <pose>1.0 2.5 0.0 0 0 0</pose>
+      <uri>model://person_standing</uri>
+      <name>victim_office_a</name>
+      <pose>0.5 3.2 0.3 1.57 0 0.3</pose>
     </include>
 
-    <!-- Orange box (hazard proxy) in right room -->
+    <!-- 화재: 사무실 A 구석 -->
+    <include>
+      <uri>model://red_cylinder</uri>
+      <name>fire_office_a</name>
+      <pose>-1.2 3.5 0.0 0 0 0</pose>
+    </include>
+
+    <!-- ==================== 사무실 B: 위험물 + 화재 + 생존자 ==================== -->
+    <!-- 선반 잔해 (넘어진 캐비닛) -->
+    <model name="cabinet_fallen">
+      <static>true</static>
+      <pose>5.0 3.0 0.3 0 0.3 0.1</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>0.4 1.0 0.6</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>0.4 1.0 0.6</size></box></geometry>
+          <material>
+            <ambient>0.45 0.45 0.45 1</ambient>
+            <diffuse>0.5 0.5 0.5 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- 위험물 (주황 박스) -->
     <include>
       <uri>model://orange_box</uri>
-      <name>hazard_proxy_1</name>
-      <pose>5.5 2.5 0.0 0 0 0</pose>
+      <name>hazmat_office_b</name>
+      <pose>6.5 2.0 0.0 0 0 0</pose>
     </include>
 
-    <!-- Person model (standing person in left room - simulating collapsed person) -->
-    <include>
-      <uri>model://person_standing</uri>
-      <name>victim_1</name>
-      <pose>0.5 3.0 0.0 0 0 0</pose>
-    </include>
-
-    <!-- Another person in right room -->
-    <include>
-      <uri>model://person_standing</uri>
-      <name>victim_2</name>
-      <pose>6.0 3.0 0.0 0 0 0</pose>
-    </include>
-
-    <!-- Second red cylinder in hallway -->
+    <!-- 화재: 사무실 B -->
     <include>
       <uri>model://red_cylinder</uri>
-      <name>fire_proxy_2</name>
+      <name>fire_office_b</name>
+      <pose>7.0 3.5 0.0 0 0 0</pose>
+    </include>
+
+    <!-- 생존자 2: 사무실 B 선반 근처 (쓰러져 있음) -->
+    <include>
+      <uri>model://person_standing</uri>
+      <name>victim_office_b</name>
+      <pose>6.0 3.3 0.3 1.57 0 -0.5</pose>
+    </include>
+
+    <!-- 책상 잔해 -->
+    <model name="desk_debris_b">
+      <static>true</static>
+      <pose>4.5 1.8 0.15 0 0 0.5</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>0.9 0.4 0.3</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>0.9 0.4 0.3</size></box></geometry>
+          <material>
+            <ambient>0.4 0.25 0.1 1</ambient>
+            <diffuse>0.4 0.25 0.1 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- ==================== 복도: 잔해 + 화재 ==================== -->
+    <!-- 복도 잔해 1: 천장 타일 떨어진 것 -->
+    <model name="corridor_debris_1">
+      <static>true</static>
+      <pose>1.0 -1.5 0.1 0 0 0.7</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>0.6 0.6 0.08</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>0.6 0.6 0.08</size></box></geometry>
+          <material>
+            <ambient>0.8 0.8 0.75 1</ambient>
+            <diffuse>0.8 0.8 0.75 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- 복도 잔해 2: 무너진 파이프/보 -->
+    <model name="corridor_debris_2">
+      <static>true</static>
+      <pose>4.5 -2.5 0.15 0 0 0.2</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>1.5 0.2 0.3</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>1.5 0.2 0.3</size></box></geometry>
+          <material>
+            <ambient>0.35 0.35 0.35 1</ambient>
+            <diffuse>0.4 0.4 0.4 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- 복도 잔해 3: 쓰러진 의자 -->
+    <model name="corridor_chair">
+      <static>true</static>
+      <pose>6.0 -1.0 0.12 0.5 0 -0.3</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>0.4 0.4 0.25</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>0.4 0.4 0.25</size></box></geometry>
+          <material>
+            <ambient>0.2 0.2 0.2 1</ambient>
+            <diffuse>0.25 0.25 0.25 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- 화재: 복도 중앙 -->
+    <include>
+      <uri>model://red_cylinder</uri>
+      <name>fire_corridor</name>
       <pose>3.0 -2.0 0.0 0 0 0</pose>
     </include>
 
