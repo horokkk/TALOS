@@ -1,0 +1,32 @@
+# ROS 2 build artifacts
+build/
+install/
+log/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+*.egg
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+*.key
+
+# Map files (generated, can be large)
+# Uncomment below if you want to track maps
+# src/talos_bringup/maps/*.pgm
+# src/talos_bringup/maps/*.yaml
