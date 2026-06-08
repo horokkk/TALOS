@@ -130,17 +130,17 @@
       </link>
     </model>
 
-    <!-- Hallway back wall - separates hallway from rooms -->
-    <!-- Left room back wall segment -->
-    <model name="wall_hallway_left">
+    <!-- Hallway back wall - separates hallway from rooms (with doorways) -->
+    <!-- Left room: door at X=1.0, gap 1.2m wide -->
+    <model name="wall_hallway_left_1">
       <static>true</static>
-      <pose>0.5 1.0 1.0 0 0 0</pose>
+      <pose>-0.8 1.0 1.0 0 0 0</pose>
       <link name="link">
         <collision name="collision">
-          <geometry><box><size>4.8 0.15 2.0</size></box></geometry>
+          <geometry><box><size>2.2 0.15 2.0</size></box></geometry>
         </collision>
         <visual name="visual">
-          <geometry><box><size>4.8 0.15 2.0</size></box></geometry>
+          <geometry><box><size>2.2 0.15 2.0</size></box></geometry>
           <material>
             <ambient>0.6 0.6 0.65 1</ambient>
             <diffuse>0.6 0.6 0.65 1</diffuse>
@@ -149,16 +149,50 @@
       </link>
     </model>
 
-    <!-- Right room back wall segment -->
-    <model name="wall_hallway_right">
+    <model name="wall_hallway_left_2">
       <static>true</static>
-      <pose>5.5 1.0 1.0 0 0 0</pose>
+      <pose>2.35 1.0 1.0 0 0 0</pose>
       <link name="link">
         <collision name="collision">
-          <geometry><box><size>4.8 0.15 2.0</size></box></geometry>
+          <geometry><box><size>1.1 0.15 2.0</size></box></geometry>
         </collision>
         <visual name="visual">
-          <geometry><box><size>4.8 0.15 2.0</size></box></geometry>
+          <geometry><box><size>1.1 0.15 2.0</size></box></geometry>
+          <material>
+            <ambient>0.6 0.6 0.65 1</ambient>
+            <diffuse>0.6 0.6 0.65 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Right room: door at X=5.5, gap 1.2m wide -->
+    <model name="wall_hallway_right_1">
+      <static>true</static>
+      <pose>3.85 1.0 1.0 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>1.5 0.15 2.0</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>1.5 0.15 2.0</size></box></geometry>
+          <material>
+            <ambient>0.6 0.6 0.65 1</ambient>
+            <diffuse>0.6 0.6 0.65 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="wall_hallway_right_2">
+      <static>true</static>
+      <pose>7.1 1.0 1.0 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>1.6 0.15 2.0</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>1.6 0.15 2.0</size></box></geometry>
           <material>
             <ambient>0.6 0.6 0.65 1</ambient>
             <diffuse>0.6 0.6 0.65 1</diffuse>
