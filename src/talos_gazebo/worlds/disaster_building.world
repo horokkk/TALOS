@@ -1,0 +1,207 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <world name="disaster_building">
+
+    <!-- Physics -->
+    <physics type="ode">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+    </physics>
+
+    <!-- Lighting -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+    <!-- ==================== BUILDING STRUCTURE ==================== -->
+    <!-- Outer walls -->
+    <!-- Front wall (Y = -4) -->
+    <model name="wall_front">
+      <static>true</static>
+      <pose>3.0 -4.0 1.0 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>10.0 0.15 2.0</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>10.0 0.15 2.0</size></box></geometry>
+          <material>
+            <ambient>0.7 0.7 0.7 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Back wall (Y = 4) -->
+    <model name="wall_back">
+      <static>true</static>
+      <pose>3.0 4.0 1.0 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>10.0 0.15 2.0</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>10.0 0.15 2.0</size></box></geometry>
+          <material>
+            <ambient>0.7 0.7 0.7 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Left wall (X = -2) -->
+    <model name="wall_left">
+      <static>true</static>
+      <pose>-2.0 0.0 1.0 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>0.15 8.0 2.0</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>0.15 8.0 2.0</size></box></geometry>
+          <material>
+            <ambient>0.7 0.7 0.7 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Right wall (X = 8) -->
+    <model name="wall_right">
+      <static>true</static>
+      <pose>8.0 0.0 1.0 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>0.15 8.0 2.0</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>0.15 8.0 2.0</size></box></geometry>
+          <material>
+            <ambient>0.7 0.7 0.7 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- ==================== INTERIOR WALLS ==================== -->
+    <!-- Center divider wall (X = 3) - splits left/right rooms -->
+    <!-- Upper section (with door gap) -->
+    <model name="wall_center_upper">
+      <static>true</static>
+      <pose>3.0 2.5 1.0 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>0.15 2.8 2.0</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>0.15 2.8 2.0</size></box></geometry>
+          <material>
+            <ambient>0.6 0.6 0.65 1</ambient>
+            <diffuse>0.6 0.6 0.65 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Lower section (with door gap) -->
+    <model name="wall_center_lower">
+      <static>true</static>
+      <pose>3.0 -2.5 1.0 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>0.15 2.8 2.0</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>0.15 2.8 2.0</size></box></geometry>
+          <material>
+            <ambient>0.6 0.6 0.65 1</ambient>
+            <diffuse>0.6 0.6 0.65 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Hallway back wall - separates hallway from rooms -->
+    <!-- Left room back wall segment -->
+    <model name="wall_hallway_left">
+      <static>true</static>
+      <pose>0.5 1.0 1.0 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>4.8 0.15 2.0</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>4.8 0.15 2.0</size></box></geometry>
+          <material>
+            <ambient>0.6 0.6 0.65 1</ambient>
+            <diffuse>0.6 0.6 0.65 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Right room back wall segment -->
+    <model name="wall_hallway_right">
+      <static>true</static>
+      <pose>5.5 1.0 1.0 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>4.8 0.15 2.0</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>4.8 0.15 2.0</size></box></geometry>
+          <material>
+            <ambient>0.6 0.6 0.65 1</ambient>
+            <diffuse>0.6 0.6 0.65 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- ==================== PROXY OBJECTS ==================== -->
+    <!-- Red cylinder (fire proxy) in left room -->
+    <include>
+      <uri>model://red_cylinder</uri>
+      <name>fire_proxy_1</name>
+      <pose>1.0 2.5 0.0 0 0 0</pose>
+    </include>
+
+    <!-- Orange box (hazard proxy) in right room -->
+    <include>
+      <uri>model://orange_box</uri>
+      <name>hazard_proxy_1</name>
+      <pose>5.5 2.5 0.0 0 0 0</pose>
+    </include>
+
+    <!-- Person model (standing person in left room - simulating collapsed person) -->
+    <include>
+      <uri>model://person_standing</uri>
+      <name>victim_1</name>
+      <pose>0.5 3.0 0.0 0 0 0</pose>
+    </include>
+
+    <!-- Another person in right room -->
+    <include>
+      <uri>model://person_standing</uri>
+      <name>victim_2</name>
+      <pose>6.0 3.0 0.0 0 0 0</pose>
+    </include>
+
+    <!-- Second red cylinder in hallway -->
+    <include>
+      <uri>model://red_cylinder</uri>
+      <name>fire_proxy_2</name>
+      <pose>3.0 -2.0 0.0 0 0 0</pose>
+    </include>
+
+  </world>
+</sdf>
