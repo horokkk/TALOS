@@ -48,6 +48,8 @@ def generate_launch_description():
         pkg_nav2_bringup, 'rviz', 'nav2_default_view.rviz'
     )
 
+    use_rviz = LaunchConfiguration('use_rviz')
+
     rviz_node = Node(
         package='rviz2',
         executable='rviz2',
@@ -55,6 +57,7 @@ def generate_launch_description():
         arguments=['-d', rviz_config],
         parameters=[{'use_sim_time': True}],
         output='screen',
+        condition=IfCondition(use_rviz),
     )
 
     # 4. YOLO detection node (optional)
@@ -96,6 +99,11 @@ def generate_launch_description():
             'use_yolo',
             default_value='false',
             description='Enable YOLO detection node',
+        ),
+        DeclareLaunchArgument(
+            'use_rviz',
+            default_value='true',
+            description='Launch RViz2 visualization',
         ),
         gazebo_launch,
         nav2_launch,
