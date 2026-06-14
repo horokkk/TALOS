@@ -1,4 +1,4 @@
-"""LLM-based natural language command parser using GPT-4o Function Calling."""
+"""LLM-based natural language command parser using OpenAI tool calling."""
 
 import json
 import os
@@ -6,47 +6,50 @@ import os
 from openai import OpenAI
 
 
-# Function schema for GPT Function Calling
-MISSION_FUNCTION = {
-    'name': 'execute_mission',
-    'description': (
-        'Execute a disaster search mission. Parse the user command into '
-        'a sequence of action steps for the robot to follow.'
-    ),
-    'parameters': {
-        'type': 'object',
-        'properties': {
-            'steps': {
-                'type': 'array',
-                'description': 'Ordered list of mission steps',
-                'items': {
-                    'type': 'object',
-                    'properties': {
-                        'action': {
-                            'type': 'string',
-                            'enum': ['go_to', 'scan_area', 'report', 'return_to_base'],
-                            'description': 'Action primitive to execute',
+# Tool schema for OpenAI tool calling
+MISSION_TOOL = {
+    'type': 'function',
+    'function': {
+        'name': 'execute_mission',
+        'description': (
+            'Execute a disaster search mission. Parse the user command into '
+            'a sequence of action steps for the robot to follow.'
+        ),
+        'parameters': {
+            'type': 'object',
+            'properties': {
+                'steps': {
+                    'type': 'array',
+                    'description': 'Ordered list of mission steps',
+                    'items': {
+                        'type': 'object',
+                        'properties': {
+                            'action': {
+                                'type': 'string',
+                                'enum': ['go_to', 'scan_area', 'report', 'return_to_base'],
+                                'description': 'Action primitive to execute',
+                            },
+                            'target': {
+                                'type': 'string',
+                                'description': 'Target room name (for go_to action)',
+                            },
+                            'detect': {
+                                'type': 'array',
+                                'items': {'type': 'string'},
+                                'description': 'Object classes to look for during scan',
+                            },
+                            'on_detect': {
+                                'type': 'string',
+                                'enum': ['report', 'retreat', 'continue'],
+                                'description': 'What to do when target object is detected',
+                            },
                         },
-                        'target': {
-                            'type': 'string',
-                            'description': 'Target room name (for go_to action)',
-                        },
-                        'detect': {
-                            'type': 'array',
-                            'items': {'type': 'string'},
-                            'description': 'Object classes to look for during scan',
-                        },
-                        'on_detect': {
-                            'type': 'string',
-                            'enum': ['report', 'retreat', 'continue'],
-                            'description': 'What to do when target object is detected',
-                        },
+                        'required': ['action'],
                     },
-                    'required': ['action'],
                 },
             },
+            'required': ['steps'],
         },
-        'required': ['steps'],
     },
 }
 
@@ -108,18 +111,18 @@ class LLMParser:
                 {'role': 'system', 'content': SYSTEM_PROMPT},
                 {'role': 'user', 'content': user_command},
             ],
-            functions=[MISSION_FUNCTION],
-            function_call={'name': 'execute_mission'},
+            tools=[MISSION_TOOL],
+            tool_choice={'type': 'function', 'function': {'name': 'execute_mission'}},
             temperature=0.0,
         )
 
-        # Extract function call arguments
-        fn_call = response.choices[0].message.function_call
-        if fn_call is None:
+        # Extract tool call arguments
+        tool_calls = response.choices[0].message.tool_calls
+        if not tool_calls:
             return self._fallback_parse(user_command)
 
         try:
-            args = json.loads(fn_call.arguments)
+            args = json.loads(tool_calls[0].function.arguments)
             steps = args.get('steps', [])
         except (json.JSONDecodeError, KeyError):
             return self._fallback_parse(user_command)
