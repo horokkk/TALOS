@@ -1,6 +1,5 @@
 """Dispatch parsed mission steps to action primitives."""
 
-import rclpy
 from rclpy.node import Node
 
 from talos_core.navigator import Navigator
