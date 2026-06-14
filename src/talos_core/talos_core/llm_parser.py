@@ -85,12 +85,10 @@ class LLMParser:
 
     def __init__(self):
         api_key = os.environ.get('OPENAI_API_KEY')
-        if not api_key:
-            raise RuntimeError(
-                'OPENAI_API_KEY 환경변수가 설정되지 않았습니다. '
-                'export OPENAI_API_KEY=your-key 로 설정하세요.'
-            )
-        self.client = OpenAI(api_key=api_key)
+        if api_key:
+            self.client = OpenAI(api_key=api_key)
+        else:
+            self.client = None
 
     def parse(self, user_command: str) -> list:
         """Parse user command into mission steps.
@@ -101,6 +99,9 @@ class LLMParser:
         Returns:
             list of step dicts: [{"action": "go_to", "target": "room_left", ...}, ...]
         """
+        if self.client is None:
+            return self._fallback_parse(user_command)
+
         response = self.client.chat.completions.create(
             model='gpt-4o',
             messages=[

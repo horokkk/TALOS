@@ -25,9 +25,10 @@ class ReportGenerator:
 
     def __init__(self):
         api_key = os.environ.get('OPENAI_API_KEY')
-        if not api_key:
-            raise RuntimeError('OPENAI_API_KEY 환경변수가 설정되지 않았습니다.')
-        self.client = OpenAI(api_key=api_key)
+        if api_key:
+            self.client = OpenAI(api_key=api_key)
+        else:
+            self.client = None
 
     def generate(self, mission_results: list) -> str:
         """Generate a situation report from mission results.
@@ -53,6 +54,9 @@ class ReportGenerator:
         if not has_detections:
             rooms = [r['room'] for r in mission_results]
             return f'탐색 완료: {", ".join(rooms)} 구역을 확인했으나 특이사항 없습니다.'
+
+        if self.client is None:
+            return self._fallback_report(mission_results)
 
         # Use GPT for detailed report
         data_str = json.dumps(mission_results, ensure_ascii=False, indent=2)
