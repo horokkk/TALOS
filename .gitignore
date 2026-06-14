@@ -26,7 +26,4 @@ Thumbs.db
 .env
 *.key
 
-# Map files (generated, can be large)
-# Uncomment below if you want to track maps
-# src/talos_bringup/maps/*.pgm
-# src/talos_bringup/maps/*.yaml
+# Map files (tracked for deployment)
