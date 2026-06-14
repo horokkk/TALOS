@@ -29,6 +29,7 @@ class ActionDispatcher:
         """
         self.mission_results = []
         current_room = 'base'
+        nav_failed = False
 
         self.node.get_logger().info(
             f'Executing mission with {len(steps)} steps'
@@ -41,15 +42,26 @@ class ActionDispatcher:
             )
 
             if action == 'go_to':
+                nav_failed = False
                 result = await self._do_go_to(step)
                 if result:
                     current_room = step.get('target', current_room)
                 else:
+                    nav_failed = True
                     self.node.get_logger().warn(
-                        f'Navigation to {step.get("target")} failed, skipping...'
+                        f'Navigation to {step.get("target")} failed, skipping scan...'
                     )
 
             elif action == 'scan_area':
+                if nav_failed:
+                    self.node.get_logger().info('Skipping scan — previous navigation failed')
+                    self.mission_results.append({
+                        'room': step.get('target', current_room),
+                        'detections': [],
+                        'skipped': True,
+                    })
+                    continue
+
                 detections = await self._do_scan(step)
                 self.mission_results.append({
                     'room': current_room,

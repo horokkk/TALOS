@@ -96,9 +96,9 @@ def input_loop(node: MissionNode, loop: asyncio.AbstractEventLoop):
             node.run_mission(command), loop
         )
         try:
-            future.result(timeout=120.0)
+            future.result(timeout=300.0)
         except TimeoutError:
-            node.get_logger().error('미션 실행 시간 초과 (120초)')
+            node.get_logger().error('미션 실행 시간 초과 (300초)')
         except Exception as e:
             node.get_logger().error(f'미션 실행 에러: {e}')
 
