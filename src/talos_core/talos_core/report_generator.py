@@ -64,7 +64,7 @@ class ReportGenerator:
 
         try:
             response = self.client.chat.completions.create(
-                model='gpt-4o',
+                model='gpt-4o-mini',
                 messages=[
                     {'role': 'system', 'content': REPORT_SYSTEM_PROMPT},
                     {'role': 'user', 'content': user_msg},
