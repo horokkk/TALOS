@@ -79,7 +79,7 @@ def generate_launch_description():
 
     return LaunchDescription([
         DeclareLaunchArgument('x_pose', default_value='0.0'),
-        DeclareLaunchArgument('y_pose', default_value='-6.5'),
+        DeclareLaunchArgument('y_pose', default_value='-4.5'),
         DeclareLaunchArgument('use_sim_gui', default_value='true'),
         gazebo_model_path,
         gzserver,
