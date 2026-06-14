@@ -32,6 +32,13 @@ class MissionNode(Node):
             self, self.navigator, self.scanner
         )
 
+        if self.llm_parser.client is None:
+            self.get_logger().warn(
+                'OPENAI_API_KEY 미설정 — 키워드 기반 파싱 모드로 동작합니다'
+            )
+        else:
+            self.get_logger().info('LLM 파서 준비 완료 (GPT-4o-mini)')
+
         self.get_logger().info(
             f'사용 가능한 방: {self.navigator.get_available_rooms()}'
         )
