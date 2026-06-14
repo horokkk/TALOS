@@ -4,7 +4,6 @@ import asyncio
 import time
 
 import numpy as np
-import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import Image
@@ -34,7 +33,6 @@ class Scanner:
     def __init__(self, node: Node):
         self.node = node
         self.cmd_vel_pub = node.create_publisher(Twist, '/cmd_vel', 10)
-        self.detections = []
         self._latest_detections = []
         self._latest_image = None
 
