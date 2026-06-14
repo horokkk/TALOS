@@ -1,5 +1,6 @@
 """Nav2 NavigateToPose action client for waypoint-based navigation."""
 
+import asyncio
 import math
 import os
 
@@ -9,6 +10,17 @@ from rclpy.node import Node
 from rclpy.action import ActionClient
 from nav2_msgs.action import NavigateToPose
 from geometry_msgs.msg import PoseStamped
+
+
+async def wait_for_rclpy_future(future, timeout=60.0):
+    """Poll an rclpy Future until it completes (bridge to asyncio)."""
+    elapsed = 0.0
+    while not future.done():
+        await asyncio.sleep(0.1)
+        elapsed += 0.1
+        if elapsed >= timeout:
+            raise TimeoutError('rclpy future timed out')
+    return future.result()
 
 
 class Navigator:
@@ -69,10 +81,11 @@ class Navigator:
         goal_msg = NavigateToPose.Goal()
         goal_msg.pose = self._make_pose(wp['x'], wp['y'], wp.get('yaw', 0.0))
 
-        # Send goal
-        send_goal_future = await self.nav_client.send_goal_async(goal_msg)
+        # Send goal (rclpy Future → asyncio polling)
+        send_goal_future = self.nav_client.send_goal_async(goal_msg)
+        goal_handle = await wait_for_rclpy_future(send_goal_future)
 
-        if not send_goal_future.accepted:
+        if not goal_handle.accepted:
             return {
                 'success': False,
                 'room': room_name,
@@ -82,8 +95,9 @@ class Navigator:
         self.node.get_logger().info(f'Goal accepted, navigating to {room_name}...')
 
         # Wait for result
-        result_future = await send_goal_future.get_result_async()
-        status = result_future.status
+        result_future = goal_handle.get_result_async()
+        result = await wait_for_rclpy_future(result_future, timeout=120.0)
+        status = result.status
 
         if status == 4:  # SUCCEEDED
             self.node.get_logger().info(f'Arrived at {room_name}')
