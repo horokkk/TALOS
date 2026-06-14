@@ -2,7 +2,12 @@ import os
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
+from launch.actions import (
+    DeclareLaunchArgument,
+    IncludeLaunchDescription,
+    LogInfo,
+)
+from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
@@ -15,6 +20,8 @@ def generate_launch_description():
 
     use_sim_time = LaunchConfiguration('use_sim_time', default='true')
     map_file = LaunchConfiguration('map')
+    use_yolo = LaunchConfiguration('use_yolo')
+
     nav2_params_file = os.path.join(pkg_talos_bringup, 'config', 'nav2_params.yaml')
 
     # 1. Gazebo simulation
@@ -50,18 +57,27 @@ def generate_launch_description():
         output='screen',
     )
 
-    # 4. YOLO detection node
-    yolo_node = Node(
-        package='yolo_bringup',
-        executable='yolo_node',
-        name='yolo_node',
-        parameters=[{
-            'use_sim_time': True,
+    # 4. YOLO detection node (optional)
+    yolo_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(
+                get_package_share_directory('yolo_bringup'),
+                'launch',
+                'yolo.launch.py',
+            )
+        ),
+        launch_arguments={
             'model': 'yolov8n.pt',
             'input_image_topic': '/camera/image_raw',
-            'threshold': 0.5,
-        }],
-        output='screen',
+            'threshold': '0.5',
+            'use_sim_time': 'true',
+        }.items(),
+        condition=IfCondition(use_yolo),
+    )
+
+    yolo_skip_msg = LogInfo(
+        msg='YOLO disabled. Launch with use_yolo:=true to enable.',
+        condition=IfCondition(LaunchConfiguration('use_yolo', default='false')),
     )
 
     return LaunchDescription([
@@ -76,8 +92,13 @@ def generate_launch_description():
             'use_sim_time',
             default_value='true',
         ),
+        DeclareLaunchArgument(
+            'use_yolo',
+            default_value='false',
+            description='Enable YOLO detection node',
+        ),
         gazebo_launch,
         nav2_launch,
         rviz_node,
-        yolo_node,
+        yolo_launch,
     ])
