@@ -37,7 +37,7 @@ TALOS는 ROS 2 기반 TurtleBot3 시뮬레이션 환경에서 동작합니다. �
 
 - **자연어 명령 해석**: 한국어/영어 텍스트 → GPT Function Calling → 구조화된 미션 스텝
 - **자율 내비게이션**: Nav2 기반 웨이포인트 이동, 기지 복귀
-- **객체 탐지**: YOLOv8 실시간 탐지 + 360도 회전 스캔
+- **객체 탐지**: YOLOv8 실시간 탐지 + HSV 색상 기반 화재/위험물 감지 + 360도 회전 스캔
 - **상황 보고**: 탐지 결과를 GPT가 자연어 보고서로 생성
 - **다중 방 순차 탐색**: 복합 명령 처리, 결과 누적, 종합 보고
 
@@ -47,7 +47,7 @@ TALOS는 ROS 2 기반 TurtleBot3 시뮬레이션 환경에서 동작합니다. �
 - **Simulation**: Gazebo Classic
 - **Autonomy**: ROS 2 Humble + Nav2
 - **Perception**: YOLOv8 via `yolo_ros`
-- **Intelligence**: OpenAI GPT-4o (Function Calling)
+- **Intelligence**: OpenAI GPT-4o-mini (Tool Calling)
 - **SLAM**: slam_toolbox
 
 ## Quick Start
@@ -135,7 +135,7 @@ talos_ws/
 
 ## Team
 
-지능형 로보틱스 과목 프로젝트 — 2025
+지능형 로보틱스 캡스톤 프로젝트 — 2026
 
 ## License
 
