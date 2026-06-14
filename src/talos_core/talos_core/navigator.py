@@ -1,15 +1,14 @@
 """Nav2 NavigateToPose action client for waypoint-based navigation."""
 
 import math
+import os
 
-import rclpy
+import yaml
+from ament_index_python.packages import get_package_share_directory
 from rclpy.node import Node
 from rclpy.action import ActionClient
 from nav2_msgs.action import NavigateToPose
 from geometry_msgs.msg import PoseStamped
-import yaml
-from ament_index_python.packages import get_package_share_directory
-import os
 
 
 class Navigator:
