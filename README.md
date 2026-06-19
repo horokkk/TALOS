@@ -6,7 +6,7 @@
 
 ## Overview
 
-TALOS는 ROS 2 기반 TurtleBot3 시뮬레이션 환경에서 동작합니다. 사용자가 텍스트로 명령을 내리면 GPT-4o가 이를 구조화된 미션으로 변환하고, Nav2 자율주행과 YOLOv8 객체 탐지를 결합하여 재난 현장을 탐색한 뒤 자연어로 상황을 보고합니다.
+TALOS는 ROS 2 기반 TurtleBot3 시뮬레이션 환경에서 동작합니다. 사용자가 텍스트로 명령을 내리면 GPT-4o-mini가 이를 구조화된 미션으로 변환하고, Nav2 자율주행과 YOLOv8 객체 탐지를 결합하여 재난 현장을 탐색한 뒤 자연어로 상황을 보고합니다.
 
 ```
 "왼쪽 방이랑 오른쪽 방 다 확인해줘"
@@ -14,7 +14,7 @@ TALOS는 ROS 2 기반 TurtleBot3 시뮬레이션 환경에서 동작합니다. �
         ▼
 ┌─────────────┐     ┌──────────────────┐     ┌─────────────┐
 │  LLM Parser │────▶│ Action Dispatcher │────▶│  Navigator  │
-│  (GPT-4o)   │     │  (미션 시퀀서)     │     │  (Nav2)     │
+│(GPT-4o-mini)│     │  (미션 시퀀서)     │     │  (Nav2)     │
 └─────────────┘     └──────────────────┘     └──────┬──────┘
                             │                        │
                             ▼                        ▼
@@ -133,9 +133,46 @@ talos_ws/
 | 2 | 다중 방 탐색 | "1층 전체 훑어봐" → 순차 탐색 → 종합 보고 |
 | 3 | 조건부 대응 | "사람 있으면 알려주고, 위험물 보이면 바로 나와" |
 
+## Demo Video
+
+[![TALOS Demo](https://img.shields.io/badge/YouTube-Demo-red)](https://youtu.be/YOUR_VIDEO_ID)
+
+> 데모 영상 (비공개 링크): https://youtu.be/YOUR_VIDEO_ID
+
 ## Team
 
-지능형 로보틱스 캡스톤 프로젝트 — 2026
+| 이름 | 역할 | 비고 |
+|------|------|------|
+| 김지윤 (Jiyoon Kim) | 전체 설계 및 구현 (1인 팀) | GitHub: [@horokkk](https://github.com/horokkk) |
+
+Robot Programming — June 2026
+
+## AI 도구 사용 내역
+
+본 프로젝트에서 사용한 AI 도구는 다음과 같습니다:
+
+| AI 도구 | 용도 | 사용 방식 |
+|---------|------|----------|
+| **OpenAI GPT-4o-mini** | 프로젝트 핵심 기능 | 자연어 명령 파싱 (Tool Calling), 상황 보고서 생성 |
+| **Claude (Anthropic)** | 개발 보조 | 코드 작성/디버깅 지원, 발표 자료 제작 보조 |
+
+- GPT-4o-mini는 시스템의 핵심 컴포넌트로, LLM Parser와 Report Generator에서 API를 통해 호출됩니다.
+- Claude는 개발 과정에서 코드 작성, 디버깅, 발표 자료 제작에 보조적으로 활용했습니다.
+- 전체 시스템 아키텍처 설계, ROS2 노드 구현, Gazebo 환경 구축은 직접 수행했습니다.
+
+## References
+
+- [ROS 2 Humble Documentation](https://docs.ros.org/en/humble/)
+- [Nav2 (Navigation2)](https://nav2.org/)
+- [Gazebo Classic](https://classic.gazebosim.org/)
+- [TurtleBot3 Documentation](https://emanual.robotis.com/docs/en/platform/turtlebot3/overview/)
+- [YOLOv8 (Ultralytics)](https://docs.ultralytics.com/)
+- [OpenAI API — Tool Calling](https://platform.openai.com/docs/guides/function-calling)
+- [slam_toolbox](https://github.com/SteveMacenski/slam_toolbox)
+
+## GitHub
+
+https://github.com/horokkk/TALOS
 
 ## License
 
