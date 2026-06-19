@@ -203,12 +203,13 @@ class Scanner:
         stop_twist = Twist()
         self.cmd_vel_pub.publish(stop_twist)
 
-        # Aggregate results — report unique classes detected
+        # Aggregate results — each class detected = 1 per scan location
+        # (color detection can only detect presence, not count individuals)
         results = []
         for cls, info in all_detections.items():
             results.append({
                 'class': cls,
-                'count': max(1, info['count'] // 5),  # Deduplicate repeated frames
+                'count': 1,
                 'confidence': round(info['max_score'], 2),
             })
 
