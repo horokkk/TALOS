@@ -106,15 +106,6 @@ class ActionDispatcher:
     async def _do_scan(self, step: dict) -> list:
         """Execute scan_area action. Returns list of detections."""
         detections = await self.scanner.scan_area()
-
-        # Filter by detect list if specified
-        detect_filter = step.get('detect')
-        if detect_filter:
-            detections = [
-                d for d in detections
-                if d.get('class') in detect_filter
-            ]
-
         return detections
 
     def _check_on_detect(self, step: dict, detections: list) -> bool:
