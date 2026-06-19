@@ -60,25 +60,27 @@ class MissionNode(Node):
 
     def _publish_initial_pose(self):
         """Set AMCL initial pose to match Gazebo spawn (0, -4.5, yaw=1.57)."""
-        pub = self.create_publisher(
+        self._initialpose_pub = self.create_publisher(
             PoseWithCovarianceStamped, '/initialpose', 10
         )
-        time.sleep(1.0)  # Wait for publisher to connect
-
-        msg = PoseWithCovarianceStamped()
-        msg.header.frame_id = 'map'
-        msg.header.stamp = self.get_clock().now().to_msg()
-        msg.pose.pose.position.x = 0.0
-        msg.pose.pose.position.y = -4.5
-        msg.pose.pose.position.z = 0.0
         yaw = 1.57
-        msg.pose.pose.orientation.z = math.sin(yaw / 2.0)
-        msg.pose.pose.orientation.w = math.cos(yaw / 2.0)
-        msg.pose.covariance[0] = 0.25
-        msg.pose.covariance[7] = 0.25
-        msg.pose.covariance[35] = 0.07
 
-        pub.publish(msg)
+        # Publish 5 times with 2s interval to ensure AMCL receives it
+        for i in range(5):
+            time.sleep(2.0)
+            msg = PoseWithCovarianceStamped()
+            msg.header.frame_id = 'map'
+            msg.header.stamp = self.get_clock().now().to_msg()
+            msg.pose.pose.position.x = 0.0
+            msg.pose.pose.position.y = -4.5
+            msg.pose.pose.position.z = 0.0
+            msg.pose.pose.orientation.z = math.sin(yaw / 2.0)
+            msg.pose.pose.orientation.w = math.cos(yaw / 2.0)
+            msg.pose.covariance[0] = 0.25
+            msg.pose.covariance[7] = 0.25
+            msg.pose.covariance[35] = 0.07
+            self._initialpose_pub.publish(msg)
+
         self.get_logger().info('초기 위치 설정 완료: (0.0, -4.5, yaw=1.57)')
 
     async def run_mission(self, command: str):
