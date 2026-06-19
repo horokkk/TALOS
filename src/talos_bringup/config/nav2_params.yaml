@@ -4,7 +4,7 @@ amcl:
     set_initial_pose: true
     initial_pose:
       x: 0.0
-      y: -5.5
+      y: -6.0
       z: 0.0
       yaw: 1.57
     alpha1: 0.2
