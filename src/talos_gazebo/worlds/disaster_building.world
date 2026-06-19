@@ -306,21 +306,21 @@
     <include>
       <uri>model://person_standing</uri>
       <name>victim_office_a</name>
-      <pose>-4.5 -3.0 0.3 1.57 0 0.3</pose>
+      <pose>-4.5 -3.0 0.0 0 0 0.3</pose>
     </include>
 
     <!-- 생존자: 사무실B -->
     <include>
       <uri>model://person_standing</uri>
       <name>victim_office_b</name>
-      <pose>4.5 3.0 0.3 1.57 0 -0.5</pose>
+      <pose>4.5 3.0 0.0 0 0 -0.5</pose>
     </include>
 
     <!-- 생존자: 복도 (넓은 곳에 배치) -->
     <include>
       <uri>model://person_standing</uri>
       <name>victim_corridor</name>
-      <pose>3.0 -3.0 0.3 1.57 0 0</pose>
+      <pose>3.0 -3.0 0.0 0 0 0</pose>
     </include>
 
   </world>
