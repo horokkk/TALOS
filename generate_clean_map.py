@@ -95,23 +95,14 @@ def main():
     draw_wall(grid, 2.9, 1.0, 1.0, 0.15)
     draw_wall(grid, 5.35, 1.0, 1.1, 0.15)
 
-    # === OBSTACLES (Gazebo world positions + yaw) ===
-    draw_rotated_obstacle(grid, -1.5, -3.5, 1.0, 0.8, 0.3)   # ceiling_collapse_1
-    draw_rotated_obstacle(grid, 1.5, -1.5, 2.0, 0.12, 0.8)   # fallen_pipe
-    # desk_collapsed_a1 removed
-    draw_rotated_obstacle(grid, -4.5, -4.0, 0.5, 0.5, -0.4)  # chair_fallen_a
-    draw_rotated_obstacle(grid, -5.0, -4.0, 0.7, 0.5, 0.6)   # wall_debris_a
-    draw_rotated_obstacle(grid, 5.0, 3.0, 0.4, 1.2, 0.1)     # cabinet_fallen_b
-    draw_rotated_obstacle(grid, 3.5, 3.5, 0.5, 0.3, 1.2)     # floor_debris_b
-    draw_rotated_obstacle(grid, 1.3, 2.5, 0.5, 0.8, 0.0)     # server_rack_fallen
-
-    # === DYNAMIC OBSTACLES (victims, fire, hazmat — also on map for planner) ===
-    draw_rotated_obstacle(grid, 2.5, -3.0, 0.4, 0.4, 0.0)    # victim_corridor
-    draw_rotated_obstacle(grid, -3.5, -2.0, 0.4, 0.4, 0.0)   # victim_office_a
-    draw_rotated_obstacle(grid, 4.0, 2.5, 0.4, 0.4, 0.0)     # victim_office_b
-    draw_rotated_obstacle(grid, 1.0, -0.5, 0.3, 0.3, 0.0)    # fire_corridor
-    draw_rotated_obstacle(grid, -4.5, -0.2, 0.3, 0.3, 0.0)   # fire_office_a
-    draw_rotated_obstacle(grid, 1.8, 2.0, 0.3, 0.3, 0.0)     # hazmat_server
+    # === DETECTION TARGETS (small, won't block paths) ===
+    draw_rotated_obstacle(grid, -4.5, -3.0, 0.4, 0.4, 0.0)   # victim_office_a
+    draw_rotated_obstacle(grid, 4.5, 3.0, 0.4, 0.4, 0.0)     # victim_office_b
+    draw_rotated_obstacle(grid, 3.0, -3.0, 0.4, 0.4, 0.0)    # victim_corridor
+    draw_rotated_obstacle(grid, -5.0, -2.0, 0.3, 0.3, 0.0)   # fire_office_a
+    draw_rotated_obstacle(grid, 4.0, -2.0, 0.3, 0.3, 0.0)    # fire_corridor
+    draw_rotated_obstacle(grid, 1.8, 2.8, 0.3, 0.3, 0.0)     # hazmat_server
+    draw_rotated_obstacle(grid, 5.0, 4.0, 0.3, 0.3, 0.0)     # hazmat_office_b
 
     # Write PGM
     output_path = "src/talos_bringup/maps/disaster_map.pgm"
