@@ -19,8 +19,18 @@ RED_UPPER_2 = np.array([180, 255, 255])
 ORANGE_LOWER = np.array([11, 120, 100])
 ORANGE_UPPER = np.array([25, 255, 255])
 
+# Skin tone ranges for person detection (Gazebo person model)
+SKIN_LOWER = np.array([5, 30, 80])
+SKIN_UPPER = np.array([17, 170, 255])
+
+# White clothing detection for Gazebo person_standing model
+# Low saturation + high value = white (walls are gray = lower value)
+WHITE_MAX_SAT = 40    # Saturation below this = desaturated (white/gray)
+WHITE_MIN_VAL = 200   # Value above this = bright white (not gray wall)
+
 # Minimum pixel ratio to count as a detection
 COLOR_MIN_RATIO = 0.005
+PERSON_MIN_RATIO = 0.003  # Lower threshold for person (smaller visual footprint)
 
 
 class Scanner:
@@ -127,6 +137,24 @@ class Scanner:
         orange_ratio = np.sum(orange_mask) / total_pixels
         if orange_ratio > COLOR_MIN_RATIO:
             results.append({'class': 'hazmat', 'score': min(orange_ratio * 20, 0.95)})
+
+        # Detect skin tone (person) — exclude pixels already counted as fire/orange
+        skin_mask = (h >= SKIN_LOWER[0]) & (h <= SKIN_UPPER[0]) & \
+                    (s >= SKIN_LOWER[1]) & (s <= SKIN_UPPER[1]) & \
+                    (v >= SKIN_LOWER[2])
+        skin_mask = skin_mask & ~red_mask_1 & ~red_mask_2 & ~orange_mask
+        skin_ratio = np.sum(skin_mask) / total_pixels
+
+        # Detect white clothing (Gazebo person_standing wears white shirt)
+        # White = low saturation + high brightness (gray walls have lower brightness)
+        white_mask = (s < WHITE_MAX_SAT) & (v > WHITE_MIN_VAL)
+        white_mask = white_mask & ~red_mask_1 & ~red_mask_2 & ~orange_mask
+        white_ratio = np.sum(white_mask) / total_pixels
+
+        # Combine skin + white clothing for person detection
+        person_ratio = skin_ratio + white_ratio
+        if person_ratio > PERSON_MIN_RATIO:
+            results.append({'class': 'person', 'score': min(person_ratio * 15, 0.90)})
 
         return results
 

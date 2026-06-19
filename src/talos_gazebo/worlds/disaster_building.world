@@ -302,25 +302,25 @@
       <pose>5.0 4.0 0.0 0 0 0</pose>
     </include>
 
-    <!-- 생존자: 사무실A (벽 근처, 통로 방해 안함) -->
+    <!-- 생존자: 사무실A (쓰러진 상태 — 흰색 셔츠가 카메라에 보이도록) -->
     <include>
       <uri>model://person_standing</uri>
       <name>victim_office_a</name>
-      <pose>-4.5 -3.0 0.0 0 0 0.3</pose>
+      <pose>-4.5 -3.0 0.3 -1.5708 0 0.3</pose>
     </include>
 
-    <!-- 생존자: 사무실B -->
+    <!-- 생존자: 사무실B (쓰러진 상태) -->
     <include>
       <uri>model://person_standing</uri>
       <name>victim_office_b</name>
-      <pose>4.5 3.0 0.0 0 0 -0.5</pose>
+      <pose>4.5 3.0 0.3 -1.5708 0 -0.5</pose>
     </include>
 
-    <!-- 생존자: 복도 (넓은 곳에 배치) -->
+    <!-- 생존자: 복도 (쓰러진 상태) -->
     <include>
       <uri>model://person_standing</uri>
       <name>victim_corridor</name>
-      <pose>3.0 -3.0 0.0 0 0 0</pose>
+      <pose>3.0 -3.0 0.3 -1.5708 0 0</pose>
     </include>
 
   </world>
