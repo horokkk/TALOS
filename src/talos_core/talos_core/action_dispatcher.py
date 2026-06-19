@@ -62,14 +62,15 @@ class ActionDispatcher:
                     })
                     continue
 
-                detections = await self._do_scan(step)
+                # Scan at all waypoints for this room
+                all_detections = await self._do_multi_scan(current_room)
                 self.mission_results.append({
                     'room': current_room,
-                    'detections': detections,
+                    'detections': all_detections,
                 })
 
                 # Check on_detect condition
-                should_retreat = self._check_on_detect(step, detections)
+                should_retreat = self._check_on_detect(step, all_detections)
                 if should_retreat:
                     self.node.get_logger().warn(
                         'Retreat condition triggered! Returning to base.'
@@ -107,6 +108,38 @@ class ActionDispatcher:
         """Execute scan_area action. Returns list of detections."""
         detections = await self.scanner.scan_area()
         return detections
+
+    async def _do_multi_scan(self, room_name: str) -> list:
+        """Scan at all waypoints for a room, merging detections."""
+        wp_count = self.navigator.get_waypoint_count(room_name)
+        merged = {}
+
+        for wp_idx in range(wp_count):
+            if wp_idx > 0:
+                self.node.get_logger().info(
+                    f'Moving to waypoint {wp_idx + 1}/{wp_count} in {room_name}'
+                )
+                result = await self.navigator.go_to(room_name, wp_index=wp_idx)
+                if not result.get('success'):
+                    self.node.get_logger().warn(
+                        f'Failed to reach waypoint {wp_idx + 1} in {room_name}, skipping'
+                    )
+                    continue
+
+            detections = await self.scanner.scan_area()
+            for det in detections:
+                cls = det.get('class')
+                if cls not in merged:
+                    merged[cls] = det
+                else:
+                    merged[cls]['count'] = max(
+                        merged[cls].get('count', 1), det.get('count', 1)
+                    )
+                    merged[cls]['confidence'] = max(
+                        merged[cls].get('confidence', 0), det.get('confidence', 0)
+                    )
+
+        return list(merged.values())
 
     def _check_on_detect(self, step: dict, detections: list) -> bool:
         """Check if on_detect condition requires retreat.

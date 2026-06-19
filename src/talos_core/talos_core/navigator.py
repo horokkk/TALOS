@@ -55,8 +55,15 @@ class Navigator:
         """Return list of available room names."""
         return list(self.waypoints.keys())
 
-    async def go_to(self, room_name: str) -> dict:
-        """Navigate to a named room. Returns result dict."""
+    def get_waypoint_count(self, room_name: str) -> int:
+        """Return number of waypoints for a room."""
+        wps = self.waypoints.get(room_name, [])
+        if isinstance(wps, list):
+            return len(wps)
+        return 1
+
+    async def go_to(self, room_name: str, wp_index: int = 0) -> dict:
+        """Navigate to a named room's waypoint. Returns result dict."""
         if room_name not in self.waypoints:
             return {
                 'success': False,
@@ -64,7 +71,13 @@ class Navigator:
                 'error': f'Unknown room: {room_name}. Available: {list(self.waypoints.keys())}',
             }
 
-        wp = self.waypoints[room_name]
+        wps = self.waypoints[room_name]
+        if isinstance(wps, list):
+            if wp_index >= len(wps):
+                wp_index = len(wps) - 1
+            wp = wps[wp_index]
+        else:
+            wp = wps
 
         # Try up to 2 times (retry once on failure)
         for attempt in range(2):
@@ -75,7 +88,7 @@ class Navigator:
                 await asyncio.sleep(3.0)
 
             self.node.get_logger().info(
-                f'Navigating to {room_name} at ({wp["x"]}, {wp["y"]})'
+                f'Navigating to {room_name} wp[{wp_index}] at ({wp["x"]}, {wp["y"]})'
             )
 
             # Wait for Nav2 action server
@@ -113,7 +126,7 @@ class Navigator:
             status = result.status
 
             if status == 4:  # SUCCEEDED
-                self.node.get_logger().info(f'Arrived at {room_name}')
+                self.node.get_logger().info(f'Arrived at {room_name} wp[{wp_index}]')
                 return {'success': True, 'room': room_name}
             else:
                 self.node.get_logger().warn(
