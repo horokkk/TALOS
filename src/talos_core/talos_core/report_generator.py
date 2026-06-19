@@ -44,7 +44,13 @@ class ReportGenerator:
             Natural language situation report string.
         """
         if not mission_results:
-            return '탐색 완료: 탐지된 객체가 없습니다.'
+            return '미션 실패: 탐색을 수행하지 못했습니다.'
+
+        # Check if ALL rooms were skipped (navigation failure)
+        all_skipped = all(r.get('skipped', False) for r in mission_results)
+        if all_skipped:
+            rooms = [r.get('room', '?') for r in mission_results]
+            return f'미션 실패: {", ".join(rooms)} 구역에 접근하지 못했습니다. 경로가 차단되었을 수 있습니다.'
 
         # Check if any detections at all
         has_detections = any(
@@ -52,8 +58,12 @@ class ReportGenerator:
         )
 
         if not has_detections:
-            rooms = [r['room'] for r in mission_results]
-            return f'탐색 완료: {", ".join(rooms)} 구역을 확인했으나 특이사항 없습니다.'
+            visited = [r['room'] for r in mission_results if not r.get('skipped')]
+            skipped = [r.get('room', '?') for r in mission_results if r.get('skipped')]
+            msg = f'탐색 완료: {", ".join(visited)} 구역을 확인했으나 특이사항 없습니다.'
+            if skipped:
+                msg += f' ({", ".join(skipped)} 구역은 접근 실패)'
+            return msg
 
         if self.client is None:
             return self._fallback_report(mission_results)

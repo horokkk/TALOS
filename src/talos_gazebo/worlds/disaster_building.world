@@ -278,7 +278,7 @@
     <!-- 복도: 천장 콘크리트 덩어리 (통로 좁힘) -->
     <model name="ceiling_collapse_1">
       <static>true</static>
-      <pose>0.0 -3.5 0.2 0.1 0.05 0.3</pose>
+      <pose>-1.5 -3.5 0.2 0.1 0.05 0.3</pose>
       <link name="link">
         <collision name="collision">
           <geometry><box><size>1.0 0.8 0.4</size></box></geometry>
@@ -311,28 +311,10 @@
       </link>
     </model>
 
-    <!-- 사무실A: 쓰러진 책상 -->
-    <model name="desk_collapsed_a1">
-      <static>true</static>
-      <pose>-4.0 -1.5 0.2 0 0.15 0.3</pose>
-      <link name="link">
-        <collision name="collision">
-          <geometry><box><size>1.2 0.6 0.4</size></box></geometry>
-        </collision>
-        <visual name="visual">
-          <geometry><box><size>1.2 0.6 0.4</size></box></geometry>
-          <material>
-            <ambient>0.4 0.25 0.1 1</ambient>
-            <diffuse>0.4 0.25 0.1 1</diffuse>
-          </material>
-        </visual>
-      </link>
-    </model>
-
     <!-- 사무실A: 쓰러진 의자 -->
     <model name="chair_fallen_a">
       <static>true</static>
-      <pose>-3.0 -3.0 0.12 0.5 0 -0.4</pose>
+      <pose>-4.5 -4.0 0.12 0.5 0 -0.4</pose>
       <link name="link">
         <collision name="collision">
           <geometry><box><size>0.5 0.5 0.25</size></box></geometry>
@@ -468,7 +450,7 @@
     <include>
       <uri>model://person_standing</uri>
       <name>victim_corridor</name>
-      <pose>0.5 -4.0 0.3 1.57 0 0</pose>
+      <pose>2.5 -3.0 0.3 1.57 0 0</pose>
     </include>
 
   </world>

@@ -81,7 +81,10 @@ class ActionDispatcher:
                 pass  # Report is generated at the end
 
             elif action == 'return_to_base':
-                await self.navigator.return_to_base()
+                if current_room != 'base':
+                    await self.navigator.return_to_base()
+                else:
+                    self.node.get_logger().info('Already at base, skipping return.')
 
             else:
                 self.node.get_logger().warn(f'Unknown action: {action}')
