@@ -65,50 +65,72 @@ class Navigator:
             }
 
         wp = self.waypoints[room_name]
-        self.node.get_logger().info(
-            f'Navigating to {room_name} at ({wp["x"]}, {wp["y"]})'
-        )
 
-        # Wait for Nav2 action server
-        if not self.nav_client.wait_for_server(timeout_sec=10.0):
-            return {
-                'success': False,
-                'room': room_name,
-                'error': 'Nav2 action server not available',
-            }
+        # Try up to 2 times (retry once on failure)
+        for attempt in range(2):
+            if attempt > 0:
+                self.node.get_logger().info(
+                    f'Retrying navigation to {room_name} (attempt {attempt + 1})...'
+                )
+                await asyncio.sleep(3.0)
 
-        # Build goal
-        goal_msg = NavigateToPose.Goal()
-        goal_msg.pose = self._make_pose(wp['x'], wp['y'], wp.get('yaw', 0.0))
+            self.node.get_logger().info(
+                f'Navigating to {room_name} at ({wp["x"]}, {wp["y"]})'
+            )
 
-        # Send goal (rclpy Future → asyncio polling)
-        send_goal_future = self.nav_client.send_goal_async(goal_msg)
-        goal_handle = await wait_for_rclpy_future(send_goal_future)
+            # Wait for Nav2 action server
+            if not self.nav_client.wait_for_server(timeout_sec=10.0):
+                if attempt == 1:
+                    return {
+                        'success': False,
+                        'room': room_name,
+                        'error': 'Nav2 action server not available',
+                    }
+                continue
 
-        if not goal_handle.accepted:
-            return {
-                'success': False,
-                'room': room_name,
-                'error': 'Goal was rejected by Nav2',
-            }
+            # Build goal
+            goal_msg = NavigateToPose.Goal()
+            goal_msg.pose = self._make_pose(wp['x'], wp['y'], wp.get('yaw', 0.0))
 
-        self.node.get_logger().info(f'Goal accepted, navigating to {room_name}...')
+            # Send goal (rclpy Future → asyncio polling)
+            send_goal_future = self.nav_client.send_goal_async(goal_msg)
+            goal_handle = await wait_for_rclpy_future(send_goal_future)
 
-        # Wait for result
-        result_future = goal_handle.get_result_async()
-        result = await wait_for_rclpy_future(result_future, timeout=120.0)
-        status = result.status
+            if not goal_handle.accepted:
+                if attempt == 1:
+                    return {
+                        'success': False,
+                        'room': room_name,
+                        'error': 'Goal was rejected by Nav2',
+                    }
+                continue
 
-        if status == 4:  # SUCCEEDED
-            self.node.get_logger().info(f'Arrived at {room_name}')
-            return {'success': True, 'room': room_name}
-        else:
-            self.node.get_logger().warn(f'Navigation to {room_name} failed with status {status}')
-            return {
-                'success': False,
-                'room': room_name,
-                'error': f'Navigation failed with status {status}',
-            }
+            self.node.get_logger().info(f'Goal accepted, navigating to {room_name}...')
+
+            # Wait for result
+            result_future = goal_handle.get_result_async()
+            result = await wait_for_rclpy_future(result_future, timeout=120.0)
+            status = result.status
+
+            if status == 4:  # SUCCEEDED
+                self.node.get_logger().info(f'Arrived at {room_name}')
+                return {'success': True, 'room': room_name}
+            else:
+                self.node.get_logger().warn(
+                    f'Navigation to {room_name} failed with status {status}'
+                )
+                if attempt == 1:
+                    return {
+                        'success': False,
+                        'room': room_name,
+                        'error': f'Navigation failed with status {status}',
+                    }
+
+        return {
+            'success': False,
+            'room': room_name,
+            'error': 'Navigation failed after retries',
+        }
 
     async def return_to_base(self) -> dict:
         """Navigate back to base position."""
