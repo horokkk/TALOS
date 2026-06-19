@@ -2,6 +2,7 @@
 
 import asyncio
 import threading
+import time
 
 import rclpy
 from rclpy.node import Node
@@ -42,6 +43,14 @@ class MissionNode(Node):
         self.get_logger().info(
             f'사용 가능한 방: {self.navigator.get_available_rooms()}'
         )
+
+        # Wait for Nav2 to be ready
+        self.get_logger().info('Nav2 액션 서버 대기 중...')
+        if self.navigator.nav_client.wait_for_server(timeout_sec=30.0):
+            self.get_logger().info('Nav2 준비 완료!')
+        else:
+            self.get_logger().warn('Nav2 서버 응답 없음 — 계속 진행합니다')
+
         self.get_logger().info('명령을 입력하세요 (종료: quit/exit)')
 
     async def run_mission(self, command: str):
