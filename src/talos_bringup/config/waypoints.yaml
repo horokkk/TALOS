@@ -1,20 +1,20 @@
 rooms:
   office_a:
     x: -3.5
-    y: -3.0
+    y: -2.0
     yaw: 1.57
   office_b:
-    x: 4.0
-    y: 3.0
+    x: 4.2
+    y: 2.5
     yaw: 1.57
   server_room:
-    x: 1.5
-    y: 1.5
-    yaw: 1.57
+    x: 1.1
+    y: 2.2
+    yaw: 0.0
   hallway:
-    x: 0.0
-    y: -2.5
-    yaw: 1.57
+    x: -0.5
+    y: -1.5
+    yaw: 0.0
   base:
     x: 0.0
     y: -4.5
