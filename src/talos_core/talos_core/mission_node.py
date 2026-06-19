@@ -1,12 +1,14 @@
 """Main ROS 2 node — CLI input → LLM parse → dispatch → report."""
 
 import asyncio
+import math
 import threading
 import time
 
 import rclpy
 from rclpy.node import Node
 from rclpy.executors import MultiThreadedExecutor
+from geometry_msgs.msg import PoseWithCovarianceStamped
 
 from talos_core.llm_parser import LLMParser
 from talos_core.navigator import Navigator
@@ -51,7 +53,33 @@ class MissionNode(Node):
         else:
             self.get_logger().warn('Nav2 서버 응답 없음 — 계속 진행합니다')
 
+        # Publish initial pose to match Gazebo spawn position
+        self._publish_initial_pose()
+
         self.get_logger().info('명령을 입력하세요 (종료: quit/exit)')
+
+    def _publish_initial_pose(self):
+        """Set AMCL initial pose to match Gazebo spawn (0, -4.5, yaw=1.57)."""
+        pub = self.create_publisher(
+            PoseWithCovarianceStamped, '/initialpose', 10
+        )
+        time.sleep(1.0)  # Wait for publisher to connect
+
+        msg = PoseWithCovarianceStamped()
+        msg.header.frame_id = 'map'
+        msg.header.stamp = self.get_clock().now().to_msg()
+        msg.pose.pose.position.x = 0.0
+        msg.pose.pose.position.y = -4.5
+        msg.pose.pose.position.z = 0.0
+        yaw = 1.57
+        msg.pose.pose.orientation.z = math.sin(yaw / 2.0)
+        msg.pose.pose.orientation.w = math.cos(yaw / 2.0)
+        msg.pose.covariance[0] = 0.25
+        msg.pose.covariance[7] = 0.25
+        msg.pose.covariance[35] = 0.07
+
+        pub.publish(msg)
+        self.get_logger().info('초기 위치 설정 완료: (0.0, -4.5, yaw=1.57)')
 
     async def run_mission(self, command: str):
         """Parse and execute a single mission command."""
