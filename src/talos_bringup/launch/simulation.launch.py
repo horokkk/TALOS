@@ -4,8 +4,10 @@ from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import (
     DeclareLaunchArgument,
+    ExecuteProcess,
     IncludeLaunchDescription,
     LogInfo,
+    TimerAction,
 )
 from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
@@ -83,6 +85,22 @@ def generate_launch_description():
         condition=IfCondition(LaunchConfiguration('use_yolo', default='false')),
     )
 
+    # 5. Auto-publish initial pose after Nav2 starts (matches spawn position)
+    set_initial_pose = TimerAction(
+        period=10.0,
+        actions=[
+            ExecuteProcess(
+                cmd=[
+                    'ros2', 'topic', 'pub', '--once',
+                    '/initialpose',
+                    'geometry_msgs/msg/PoseWithCovarianceStamped',
+                    '{header: {frame_id: "map"}, pose: {pose: {position: {x: 0.0, y: -4.5, z: 0.0}, orientation: {z: 0.7071, w: 0.7071}}}}'
+                ],
+                output='screen',
+            ),
+        ],
+    )
+
     return LaunchDescription([
         DeclareLaunchArgument(
             'map',
@@ -109,4 +127,5 @@ def generate_launch_description():
         nav2_launch,
         rviz_node,
         yolo_launch,
+        set_initial_pose,
     ])
