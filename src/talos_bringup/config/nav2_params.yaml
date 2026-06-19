@@ -36,7 +36,7 @@ amcl:
     save_pose_rate: 0.5
     sigma_hit: 0.2
     tf_broadcast: true
-    transform_tolerance: 1.0
+    transform_tolerance: 2.0
     update_min_a: 0.2
     update_min_d: 0.25
     z_hit: 0.5
@@ -105,7 +105,7 @@ controller_server:
       sim_time: 1.7
       linear_granularity: 0.05
       angular_granularity: 0.025
-      transform_tolerance: 0.2
+      transform_tolerance: 2.0
       xy_goal_tolerance: 0.25
       trans_stopped_velocity: 0.25
       short_circuit_trajectory_evaluation: true
@@ -249,7 +249,7 @@ behavior_server:
       plugin: "nav2_behaviors/Wait"
     global_frame: odom
     robot_base_frame: base_link
-    transform_tolerance: 0.1
+    transform_tolerance: 2.0
     use_sim_time: true
     simulate_ahead_time: 2.0
     max_rotational_vel: 1.0
