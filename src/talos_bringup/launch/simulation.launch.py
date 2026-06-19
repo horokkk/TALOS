@@ -124,8 +124,8 @@ def generate_launch_description():
             description='Launch RViz2 visualization',
         ),
         gazebo_launch,
-        nav2_launch,
-        rviz_node,
+        TimerAction(period=15.0, actions=[nav2_launch]),
+        TimerAction(period=15.0, actions=[rviz_node]),
         yolo_launch,
         set_initial_pose,
     ])
