@@ -148,17 +148,17 @@ class ReportGenerator:
                     tag = cls_emoji.get(cls, f'[{cls}]')
 
                     if cls == 'person':
-                        total_persons += count
-                        lines.append(f'  - {tag} {label} {count}명 발견 (신뢰도 {confidence:.0%}) — 즉각 구조 필요')
-                        alert_rooms.append((room, 'person', count))
+                        total_persons += 1
+                        lines.append(f'  - {tag} {label} 발견 (신뢰도 {confidence:.0%}) — 즉각 구조 필요')
+                        alert_rooms.append((room, 'person'))
                     elif cls == 'fire':
-                        total_fires += count
-                        lines.append(f'  - {tag} {label} 감지 {count}건 (신뢰도 {confidence:.0%}) — 진화 요청')
-                        alert_rooms.append((room, 'fire', count))
+                        total_fires += 1
+                        lines.append(f'  - {tag} {label} 감지 (신뢰도 {confidence:.0%}) — 진화 요청')
+                        alert_rooms.append((room, 'fire'))
                     elif cls == 'hazmat':
-                        total_hazmats += count
-                        lines.append(f'  - {tag} {label} 감지 {count}건 (신뢰도 {confidence:.0%}) — 접근 통제 권고')
-                        alert_rooms.append((room, 'hazmat', count))
+                        total_hazmats += 1
+                        lines.append(f'  - {tag} {label} 감지 (신뢰도 {confidence:.0%}) — 접근 통제 권고')
+                        alert_rooms.append((room, 'hazmat'))
                     else:
                         lines.append(f'  - [{cls}] {count}건 탐지')
 
@@ -173,17 +173,17 @@ class ReportGenerator:
             lines.append(f'  건물 내 즉각적 위험 요소는 발견되지 않았습니다.')
         else:
             if total_persons > 0:
-                lines.append(f'  - 생존자 총 {total_persons}명 확인. 긴급 구조대 투입이 필요합니다.')
+                lines.append(f'  - 생존자 {total_persons}개 구역에서 발견. 긴급 구조대 투입이 필요합니다.')
             if total_fires > 0:
-                lines.append(f'  - 화재 {total_fires}건 감지. 소방 진화팀 즉시 투입 요망.')
+                lines.append(f'  - 화재 {total_fires}개 구역에서 감지. 소방 진화팀 즉시 투입 요망.')
             if total_hazmats > 0:
-                lines.append(f'  - 위험물질 {total_hazmats}건 확인. 해당 구역 접근 통제 및 HAZMAT 팀 요청.')
+                lines.append(f'  - 위험물질 {total_hazmats}개 구역에서 확인. 해당 구역 접근 통제 및 HAZMAT 팀 요청.')
 
             lines.append('')
             lines.append(f'[우선 조치 대상]')
-            for room, cls, count in alert_rooms:
+            for room, cls in alert_rooms:
                 label = cls_names.get(cls, cls)
-                lines.append(f'  → {room}: {label} {count}건')
+                lines.append(f'  → {room}: {label} 발견')
 
         lines.append('')
         lines.append(f'  TALOS 탐색 로봇 — 보고 종료.')
