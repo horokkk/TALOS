@@ -137,7 +137,7 @@ talos_ws/
 
 [![TALOS Demo](https://img.shields.io/badge/YouTube-Demo-red)](https://youtu.be/YOUR_VIDEO_ID)
 
-> 데모 영상 (비공개 링크): https://youtu.be/YOUR_VIDEO_ID
+> 데모 영상 (비공개 링크): https://youtu.be/8YS7ANdm-4A
 
 ## Team
 
